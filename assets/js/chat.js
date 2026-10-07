@@ -142,13 +142,35 @@
       return el;
     }
 
-    function specialistButton() {
+    const SUGGESTED_TOPICS = [
+      { label: "Usar FGTS no consórcio", query: "FGTS" },
+      { label: "Como funciona a contemplação", query: "contemplação" },
+      { label: "Como evitar fraudes", query: "fraude" },
+    ];
+
+    function specialistLink() {
       return `
-        <div class="chat-handoff">
-          <p>Não encontrou o que precisava?</p>
-          <button type="button" class="btn btn-secondary chat-handoff-btn" data-chat-specialist>
-            Fale com um especialista
-          </button>
+        <button type="button" class="chat-handoff-link" data-chat-specialist>
+          Fale com um especialista
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </button>`;
+    }
+
+    function suggestionsHTML() {
+      const chips = SUGGESTED_TOPICS.map(
+        (t) => `
+        <button type="button" class="chat-suggestion" data-chat-suggestion="${escapeHtml(t.query)}">
+          ${escapeHtml(t.label)}
+        </button>`
+      ).join("");
+
+      return `
+        <p class="chat-suggestions-label">Sugestões de temas:</p>
+        <div class="chat-suggestions">${chips}</div>
+        <div class="chat-handoff chat-handoff--quiet">
+          ${specialistLink()}
         </div>`;
     }
 
@@ -157,7 +179,7 @@
         return `
           <p>Não encontrei conteúdos sobre “${escapeHtml(query)}” na Central de Ajuda e no Blog.</p>
           <p>Tente outras palavras, como FGTS, contemplação, parcela ou fraude — ou fale com um especialista.</p>
-          ${specialistButton()}`;
+          <div class="chat-handoff chat-handoff--quiet">${specialistLink()}</div>`;
       }
 
       const cards = items
@@ -177,7 +199,10 @@
       return `
         <p>Encontrei estes conteúdos que podem ajudar com “${escapeHtml(query)}”:</p>
         <div class="chat-results">${cards}</div>
-        ${specialistButton()}`;
+        <div class="chat-handoff chat-handoff--quiet">
+          <p>Não encontrou o que precisava?</p>
+          ${specialistLink()}
+        </div>`;
     }
 
     function welcome() {
@@ -185,11 +210,32 @@
       appendMessage(
         "bot",
         `<p>Olá! Sou o assistente da <strong>CAIXA Consórcio</strong>.</p>
-         <p>Digite sua dúvida e eu busco respostas na Central de Ajuda e no Blog.</p>
-         <p>Se preferir atendimento humano, use o botão abaixo.</p>
-         ${specialistButton()}`
+         <p>Digite sua dúvida ou escolha um tema abaixo — eu busco respostas na Central de Ajuda e no Blog.</p>
+         ${suggestionsHTML()}`
       );
       started = true;
+    }
+
+    function ask(query) {
+      const q = String(query || "").trim();
+      if (!q) return;
+
+      appendMessage("user", `<p>${escapeHtml(q)}</p>`);
+      input.value = "";
+
+      const typing = appendMessage(
+        "bot",
+        `<p class="chat-typing">Buscando nos conteúdos do site…</p>`
+      );
+
+      setTimeout(() => {
+        const results =
+          window.CaixaSearch && typeof window.CaixaSearch.search === "function"
+            ? window.CaixaSearch.search(q, "all")
+            : [];
+        typing.innerHTML = renderResults(results, q);
+        scrollToBottom();
+      }, 350);
     }
 
     function open() {
@@ -227,32 +273,21 @@
     });
 
     messagesEl.addEventListener("click", (e) => {
-      const btn = e.target.closest("[data-chat-specialist]");
-      if (!btn) return;
-      showView("specialist");
+      const specialist = e.target.closest("[data-chat-specialist]");
+      if (specialist) {
+        showView("specialist");
+        return;
+      }
+
+      const suggestion = e.target.closest("[data-chat-suggestion]");
+      if (suggestion) {
+        ask(suggestion.getAttribute("data-chat-suggestion"));
+      }
     });
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      const q = input.value.trim();
-      if (!q) return;
-
-      appendMessage("user", `<p>${escapeHtml(q)}</p>`);
-      input.value = "";
-
-      const typing = appendMessage(
-        "bot",
-        `<p class="chat-typing">Buscando nos conteúdos do site…</p>`
-      );
-
-      setTimeout(() => {
-        const results =
-          window.CaixaSearch && typeof window.CaixaSearch.search === "function"
-            ? window.CaixaSearch.search(q, "all")
-            : [];
-        typing.innerHTML = renderResults(results, q);
-        scrollToBottom();
-      }, 350);
+      ask(input.value);
     });
 
     leadForm.addEventListener("submit", (e) => {

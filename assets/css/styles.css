@@ -963,20 +963,78 @@ main > section {
   overflow: hidden;
 }
 
+.chat-suggestions-label {
+  margin: 10px 0 8px !important;
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+
+.chat-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chat-suggestion {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line-soft);
+  background: #f0f5fa;
+  color: #005ca9;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.chat-suggestion:hover {
+  border-color: #005ca9;
+  background: #e8f1f8;
+}
+
 .chat-handoff {
   margin-top: 12px;
   padding-top: 12px;
   border-top: 1px solid var(--line-soft);
 }
 
+.chat-handoff--quiet {
+  border-top: none;
+  padding-top: 4px;
+}
+
 .chat-handoff p {
-  margin: 0 0 10px;
+  margin: 0 0 8px;
   font-size: 13px;
   color: var(--ink-muted);
 }
 
-.chat-handoff-btn {
-  width: 100%;
+.chat-handoff-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #005ca9;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.chat-handoff-link:hover {
+  color: #004680;
+}
+
+.chat-handoff-link svg {
+  flex-shrink: 0;
 }
 
 .chat-composer {
