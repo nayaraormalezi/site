@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Busca · CAIXA Consórcio</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body>
+    <div data-mount-header></div>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <p class="section-label">Busca no site</p>
+          <h1 data-results-title>Resultados</h1>
+          <p data-results-meta class="results-meta"></p>
+        </div>
+      </section>
+      <div class="container results-layout" data-results-page>
+        <aside class="results-sidebar">
+          <h2>Filtrar por</h2>
+          <button type="button" class="side-filter is-active" data-side-filter="all">
+            Tudo <span>0</span>
+          </button>
+          <button type="button" class="side-filter" data-side-filter="ajuda">
+            Central de Ajuda <span>0</span>
+          </button>
+          <button type="button" class="side-filter" data-side-filter="blog">
+            Blog <span>0</span>
+          </button>
+          <button type="button" class="side-filter" data-side-filter="produto">
+            Produtos <span>0</span>
+          </button>
+        </aside>
+        <section>
+          <div class="results-list" data-results-list></div>
+        </section>
+      </div>
+    </main>
+    <div data-mount-footer></div>
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/layout.js"></script>
+    <script src="assets/js/search.js"></script>
+    <script src="assets/js/chat.js"></script>
+  </body>
+</html>

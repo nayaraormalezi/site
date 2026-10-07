@@ -1,0 +1,10 @@
+{
+  "name": "caixa-consorcio-busca",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Simulação do site CAIXA Consórcio com busca no header",
+  "scripts": {
+    "start": "python3 -m http.server 5173",
+    "dev": "python3 -m http.server 5173"
+  }
+}
