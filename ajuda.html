@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Central de Ajuda · CAIXA Consórcio</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body>
+    <div data-mount-header></div>
+    <main>
+      <article class="help-article" data-help-article>
+        <div class="container help-article__inner">
+          <nav class="help-article__nav" aria-label="Navegação da dúvida">
+            <a class="help-article__back" href="central-de-ajuda.html" aria-label="Voltar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </a>
+            <ol class="help-breadcrumb">
+              <li><a href="central-de-ajuda.html">Central de Ajuda</a></li>
+              <li><a href="central-de-ajuda.html" data-help-category>Todas as dúvidas</a></li>
+              <li aria-current="page" data-help-crumb-title></li>
+            </ol>
+          </nav>
+
+          <h1 data-help-title>Carregando…</h1>
+          <div class="help-article__body" data-help-body></div>
+        </div>
+      </article>
+    </main>
+    <div data-mount-footer></div>
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/layout.js"></script>
+    <script src="assets/js/search.js"></script>
+    <script src="assets/js/chat.js"></script>
+  </body>
+</html>

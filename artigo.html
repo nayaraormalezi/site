@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blog · CAIXA Consórcio</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body>
+    <div data-mount-header></div>
+    <main>
+      <article class="blog-article" data-blog-article>
+        <div class="container">
+          <nav class="blog-article__nav" aria-label="Navegação do artigo">
+            <a class="help-article__back" href="blog.html" aria-label="Voltar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </a>
+            <ol class="help-breadcrumb">
+              <li><a href="blog.html">Blog</a></li>
+              <li aria-current="page" data-blog-crumb></li>
+            </ol>
+          </nav>
+
+          <header class="blog-article__header">
+            <div class="blog-article__lead">
+              <h1 data-blog-title>Carregando…</h1>
+              <p class="blog-article__intro" data-blog-intro></p>
+            </div>
+            <aside class="blog-article__meta">
+              <ul class="blog-article__tags" data-blog-tags></ul>
+              <p class="blog-article__date">
+                Publicado em: <strong data-blog-date></strong>
+              </p>
+              <p class="blog-article__author">
+                Por: <strong data-blog-author>CAIXA Consórcio</strong>
+              </p>
+            </aside>
+          </header>
+
+          <figure class="blog-article__hero">
+            <img data-blog-image alt="" />
+          </figure>
+
+          <div class="blog-article__grid">
+            <div class="blog-article__content" data-blog-body></div>
+            <aside class="blog-article__sidebar">
+              <p class="blog-article__sidebar-label">Últimas postagens</p>
+              <div class="blog-article__sidebar-list" data-blog-sidebar></div>
+            </aside>
+          </div>
+        </div>
+
+        <section class="blog-recent">
+          <div class="container">
+            <div class="blog-recent__head">
+              <div>
+                <p class="section-label">Blog</p>
+                <h2>Artigos recentes</h2>
+              </div>
+              <a class="blog-recent__all" href="blog.html">Ir para todos →</a>
+            </div>
+            <div class="blog-recent__grid" data-blog-recent></div>
+          </div>
+        </section>
+      </article>
+    </main>
+    <div data-mount-footer></div>
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/layout.js"></script>
+    <script src="assets/js/search.js"></script>
+    <script src="assets/js/chat.js"></script>
+  </body>
+</html>

@@ -386,7 +386,7 @@
       el.innerHTML = items
         .map(
           (item) => `
-        <a class="content-card" href="${item.url}" id="${item.id.replace(/^(ajuda|blog)-/, "")}">
+        <a class="content-card" href="${item.url}">
           <span class="badge">${item.category || labels[item.type]}</span>
           <span>
             <h2>${escapeHtml(item.title)}</h2>
@@ -399,11 +399,181 @@
     });
   }
 
+  function initHelpArticle() {
+    const root = document.querySelector("[data-help-article]");
+    if (!root) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+    const item =
+      content.find((c) => c.type === "ajuda" && c.id === id) ||
+      content.find((c) => c.type === "ajuda");
+
+    if (!item) {
+      window.location.replace("central-de-ajuda.html");
+      return;
+    }
+
+    const title = item.title;
+    const category = item.category || "Todas as dúvidas";
+    const body = item.body || item.excerpt || "";
+
+    document.title = `${title} · CAIXA Consórcio`;
+
+    const titleEl = root.querySelector("[data-help-title]");
+    const bodyEl = root.querySelector("[data-help-body]");
+    const crumbTitle = root.querySelector("[data-help-crumb-title]");
+    const categoryEl = root.querySelector("[data-help-category]");
+
+    if (titleEl) titleEl.textContent = title;
+    if (crumbTitle) crumbTitle.textContent = title;
+    if (categoryEl) categoryEl.textContent = category;
+    if (bodyEl) {
+      bodyEl.innerHTML = body
+        .split(/\n+/)
+        .map((p) => p.trim())
+        .filter(Boolean)
+        .map((p) => `<p>${escapeHtml(p)}</p>`)
+        .join("");
+    }
+
+    const back = root.querySelector(".help-article__back");
+    if (back) {
+      back.addEventListener("click", (e) => {
+        if (window.history.length > 1) {
+          e.preventDefault();
+          window.history.back();
+        }
+      });
+    }
+  }
+
+  function initBlogArticle() {
+    const root = document.querySelector("[data-blog-article]");
+    if (!root) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+    const posts = content.filter((c) => c.type === "blog");
+    const item = posts.find((c) => c.id === id) || posts[0];
+
+    if (!item) {
+      window.location.replace("blog.html");
+      return;
+    }
+
+    document.title = `${item.title} · CAIXA Consórcio`;
+
+    const setText = (sel, value) => {
+      const el = root.querySelector(sel);
+      if (el) el.textContent = value || "";
+    };
+
+    setText("[data-blog-title]", item.title);
+    setText("[data-blog-intro]", item.intro || item.excerpt || "");
+    setText("[data-blog-crumb]", item.title);
+    setText("[data-blog-date]", item.date || "");
+    setText("[data-blog-author]", item.author || "CAIXA Consórcio");
+
+    const tagsEl = root.querySelector("[data-blog-tags]");
+    if (tagsEl) {
+      const cats = item.categories || (item.category ? [item.category] : []);
+      tagsEl.innerHTML = cats
+        .map((c) => `<li>${escapeHtml(c)}</li>`)
+        .join("");
+    }
+
+    const img = root.querySelector("[data-blog-image]");
+    if (img) {
+      if (item.image) {
+        img.src = item.image;
+        img.alt = item.title;
+        img.hidden = false;
+      } else {
+        img.hidden = true;
+      }
+    }
+
+    const bodyEl = root.querySelector("[data-blog-body]");
+    if (bodyEl) {
+      const sections = item.sections || [];
+      if (sections.length) {
+        bodyEl.innerHTML = sections
+          .map(
+            (section) => `
+            <section class="blog-article__section">
+              <h2>${escapeHtml(section.heading || "")}</h2>
+              ${(section.paragraphs || [])
+                .map((p) => `<p>${escapeHtml(p)}</p>`)
+                .join("")}
+            </section>`
+          )
+          .join("");
+      } else {
+        bodyEl.innerHTML = `<p>${escapeHtml(item.excerpt || "")}</p>`;
+      }
+    }
+
+    const others = posts.filter((p) => p.id !== item.id);
+
+    const sidebar = root.querySelector("[data-blog-sidebar]");
+    if (sidebar) {
+      sidebar.innerHTML = others
+        .slice(0, 3)
+        .map(
+          (p) => `
+          <a class="blog-side-card" href="${p.url}">
+            <img src="${p.image || ""}" alt="" loading="lazy" />
+            <div>
+              <span class="blog-side-card__cat">${escapeHtml(
+                (p.categories && p.categories[0]) || p.category || "Blog"
+              )}</span>
+              <strong>${escapeHtml(p.title)}</strong>
+            </div>
+          </a>`
+        )
+        .join("");
+    }
+
+    const recent = root.querySelector("[data-blog-recent]");
+    if (recent) {
+      recent.innerHTML = others
+        .slice(0, 4)
+        .map(
+          (p) => `
+          <a class="blog-recent-card" href="${p.url}">
+            <div class="blog-recent-card__media">
+              <span class="blog-recent-card__badge">${escapeHtml(
+                (p.categories && p.categories[0]) || p.category || "Blog"
+              )}</span>
+              <img src="${p.image || ""}" alt="" loading="lazy" />
+            </div>
+            <h3>${escapeHtml(p.title)}</h3>
+            <p>${escapeHtml(p.excerpt || "")}</p>
+            <span class="blog-recent-card__link">Ler artigo completo →</span>
+          </a>`
+        )
+        .join("");
+    }
+
+    const back = root.querySelector(".help-article__back");
+    if (back) {
+      back.addEventListener("click", (e) => {
+        if (window.history.length > 1) {
+          e.preventDefault();
+          window.history.back();
+        }
+      });
+    }
+  }
+
   function boot() {
     initHeaderChrome();
     initHeaderSearch();
     initResultsPage();
     initContentLists();
+    initHelpArticle();
+    initBlogArticle();
   }
 
   if (document.readyState === "loading") {
